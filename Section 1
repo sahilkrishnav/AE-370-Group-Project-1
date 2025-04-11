@@ -1,0 +1,68 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create figure and axes
+fig, ax = plt.subplots(figsize=(7, 7))
+ax.set_xlim(-1.8, 1.8)
+ax.set_ylim(-1.6, 1.6)
+ax.set_aspect('equal')
+ax.axis('off')
+
+# Pendulum parameters
+L = 1.2              # Length of pendulum
+theta = np.pi / 4    # Angle from vertical (45 degrees)
+
+# Pivot point
+pivot_x, pivot_y = 0, 0
+mass_x = L * np.sin(theta)
+mass_y = -L * np.cos(theta)
+
+# Draw the pendulum rod
+ax.plot([pivot_x, mass_x], [pivot_y, mass_y], color='black', linewidth=3)
+
+# Draw the pendulum mass
+ax.plot(mass_x, mass_y, 'ro', markersize=14)
+ax.text(mass_x + 0.1, mass_y, 'm', fontsize=12)
+
+# Draw the pivot
+ax.plot(pivot_x, pivot_y, 'ko', markersize=8)
+ax.text(0, 0.07, 'Pivot', fontsize=11, ha='center')
+
+# Draw angle arc
+arc_theta = np.linspace(-np.pi/15, theta, 100)
+arc_r = 0.3
+arc_x = arc_r * np.sin(arc_theta)
+arc_y = -arc_r * np.cos(arc_theta)
+ax.plot(arc_x, arc_y, 'b--', linewidth=1)
+ax.text(0.32, -0.05, r'$\theta(t)$', fontsize=13, color='blue')
+
+# Draw wall (left) for damper
+ax.plot([-0.9, -0.9], [0.3, -0.3], color='dimgray', linewidth=5)
+ax.plot([-0.9, -0.7], [0.3, 0.3], color='dimgray', linewidth=2)
+ax.plot([-0.9, -0.7], [-0.3, -0.3], color='dimgray', linewidth=2)
+
+# Draw damper body (rectangle)
+damper_x = [-0.7, -0.5, -0.5, -0.7, -0.7]
+damper_y = [-0.2, -0.2, 0.2, 0.2, -0.2]
+ax.plot(damper_x, damper_y, color='gray', linewidth=2)
+ax.fill(damper_x, damper_y, 'lightgray')
+ax.text(-0.6, 0, 'Damper', fontsize=10, ha='center', va='center')
+
+# Draw piston rod to pivot
+ax.plot([-0.5, 0], [0, 0], 'k-', linewidth=1.5)
+
+# Damping force label
+ax.arrow(-0.7, 0.25, -0.15, 0, head_width=0.05, head_length=0.05, fc='gray', ec='gray')
+ax.text(-0.95, 0.25, r'$-\gamma \dot{\theta}$', fontsize=11, color='gray', ha='right')
+
+# Driving torque arrow (at pivot)
+ax.arrow(0.1, 0.05, 0.25, 0.15, head_width=0.05, head_length=0.05, fc='green', ec='green')
+ax.text(0.4, 0.25, r'$f \cos(\omega t)$', color='green', fontsize=11)
+
+# Gravity arrow on mass
+ax.arrow(mass_x, mass_y, 0, -0.25, head_width=0.05, head_length=0.05, fc='blue', ec='blue')
+ax.text(mass_x + 0.05, mass_y - 0.3, 'mg', fontsize=11, color='blue')
+
+# Title
+plt.title('Detailed Schematic of the Damped, Driven Nonlinear Pendulum', fontsize=13)
+plt.show()
